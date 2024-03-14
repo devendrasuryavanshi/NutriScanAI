@@ -1,0 +1,73 @@
+
+* {
+    box-sizing: border-box;
+    font-family: sora;
+}
+
+html, body {
+    background-color: #000;
+    color: #fff;
+}
+
+.Excellent {
+    background-color: rgb(5 150 105) !important;
+}
+
+.Good {
+    background-color: rgb(130, 163, 13) !important;
+}
+
+.Moderate {
+    background-color: rgb(202 138 4) !important;
+}
+
+.Fair {
+    background-color: rgb(249 115 22) !important;
+}
+
+.Poor {
+    background-color: rgb(220 38 38) !important;
+}
+
+.Excellent-eco {
+    color: rgb(5 150 105) !important;
+}
+
+.Good-eco {
+    color: rgb(130, 163, 13) !important;
+}
+
+.Moderate-eco {
+    color: rgb(202 138 4) !important;
+}
+
+.Fair-eco {
+    color: rgb(249 115 22) !important;
+}
+
+.Poor-eco {
+    color: rgb(220 38 38) !important;
+}
+
+/* SCROLL */
+
+::-webkit-scrollbar {
+    width: 6px; /* Change the width of the vertical scrollbar */
+    height: 6px; /* Change the height of the horizontal scrollbar */
+  }
+  
+  /* Track (the area where the scrollbar moves) */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Change the background color of the track */
+  }
+  
+  /* Thumb (the draggable part of the scrollbar) */
+  ::-webkit-scrollbar-thumb {
+    background: #888; /* Change the color of the thumb */
+    border-radius: 3px; /* Add rounded corners to the thumb */
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Change the color of the thumb on hover */
+  }
