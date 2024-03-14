@@ -149,21 +149,23 @@ function removeData() {
 
 function createTable(data) {
     // Ingredients table
-    for (let i = 0; i < data.ingredients_table.length; i++) {
-        const newRow = document.createElement('tr');
-        newRow.className += "odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700";
-        newRow.innerHTML = `
-            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                ${data.ingredients_table[i].name}
-            </th>
-            <td class="px-6 py-4">
-                ${data.ingredients_table[i].simplifiedName}
-            </td>
-            <td class="px-6 py-4">
-                ${data.ingredients_table[i].amountPerServing}
-            </td>
-        `;
-        document.getElementById('table1').append(newRow);
+    if(data.ingredients_table != null && data.ingredients_table.length > 0) {
+        for (let i = 0; i < data.ingredients_table.length; i++) {
+            const newRow = document.createElement('tr');
+            newRow.className += "odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700";
+            newRow.innerHTML = `
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    ${data.ingredients_table[i].name}
+                </th>
+                <td class="px-6 py-4">
+                    ${data.ingredients_table[i].simplifiedName}
+                </td>
+                <td class="px-6 py-4">
+                    ${data.ingredients_table[i].amountPerServing}
+                </td>
+            `;
+            document.getElementById('table1').append(newRow);
+        }
     }
 
     // Nutrients table
