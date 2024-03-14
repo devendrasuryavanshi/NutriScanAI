@@ -1,4 +1,7 @@
 # NutriScanAI 🥗🔍
+
+[![Visit the Site](https://img.shields.io/badge/Visit%20the%20Site-Here-brightgreen)](https://nutriscanai.onrender.com/)
+
 <img src="public/images/logo.png" alt="Image" style="width: 300px; height: auto; border-radius: 30px;">
 
 ## Scan Smart, Eat Smart 🌱🧠
