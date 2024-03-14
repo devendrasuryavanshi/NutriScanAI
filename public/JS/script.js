@@ -23,6 +23,18 @@ let file = input.files[0];
 let src = null;
 let prevData = null;
 
+// Feedback
+document.getElementById('feedbackBtn').addEventListener('click', redirectToGmail);
+function redirectToGmail() {
+    var recipientEmail = 'doodlemessage@gmail.com';
+    var subject = 'Feedback';
+    var body = '';
+    // Construct the mailto link
+    var mailtoLink = 'mailto:' + recipientEmail + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    // Redirect to Gmail
+    window.location.href = mailtoLink;
+}
+
 // Event listeners
 scanBtn.addEventListener('click', async () => {
     if (!file) {
