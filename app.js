@@ -14,7 +14,9 @@ let image;
 
 // Import necessary modules
 const http = require('http').createServer(app);
-const io = require('socket.io')(http);
+const io = require('socket.io')(http, {
+  maxHttpBufferSize: 30 * 1024 * 1024, // 30 MB limit
+});
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const fs = require("fs");
 
