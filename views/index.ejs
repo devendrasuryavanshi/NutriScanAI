@@ -30,7 +30,9 @@
     <!-- Header section -->
     <div class="head">
         <!-- Image preview -->
-        <img id="preview" class="hidden rounded-3xl fixed z-20 h-auto top-10 w-10/12 left-8 sm:w-12/12 md:w-10/12 md:left-16 lg:w-8/12 lg:left-48 xl:w-6/12 xl:left-80 rounded-lg shadow-xl dark:shadow-gray-800" src="https://media.licdn.com/dms/image/D4E22AQFRWf5V6Syu-g/feedshare-shrink_800/0/1694162697025?e=2147483647&v=beta&t=lq2Qb4BRIOLTrJxLM7t2hJsGKyYob1HayXxL53jqIdY" alt="image description" >
+        <div id="preview-img-back" class="hidden z-20 w-screen h-screen fixed top-0 left-0 flex justify-center items-center">
+            <img id="preview" class="hidden z-20 w-auto h-4/6 sm:w-auto md:w-auto lg:w-auto xl:w-auto xl:max-w-screen-md xl:h-4/6 lg:max-w-screen-md lg:h-4/6 md:h-4/6 md:max-w-screen-sm sm:h-4/6 sm:max-w-xl top-10 rounded-2xl flex items-center justify-center dark:bg-gray-700 object-contain" src="https://media.licdn.com/dms/image/D4E22AQFRWf5V6Syu-g/feedshare-shrink_800/0/1694162697025?e=2147483647&v=beta&t=lq2Qb4BRIOLTrJxLM7t2hJsGKyYob1HayXxL53jqIdY" alt="image description" style="max-width: 90%;">
+        </div>
         
         <!-- Main section -->
         <section class="bg-white dark:bg-gray-900 bg-[url('https://i.pinimg.com/originals/19/09/f9/1909f9e57aca7d81ab5cbb50b9a7a069.gif')] dark:bg-[url('https://i.pinimg.com/originals/19/09/f9/1909f9e57aca7d81ab5cbb50b9a7a069.gif')]">
@@ -267,7 +269,7 @@
         </button>
         
         <input type="file" accept="image/jpg, image/jpeg, image/png, image/webp, image/heic, image/heif" id="image-input" class="hidden">
-        <button id="scanBtn" type="button" class="flex z-20 item-center hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-bold rounded-full text-xl px-5 py-2.5 text-center dark:bg-emerald-700 dark:hover:bg-emerald-800 dark:focus:ring-emerald-800">Scan 
+        <button id="scanBtn" type="button" class="flex z-20 item-center hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-bold rounded-full text-xl px-5 py-2.5 text-center dark:bg-emerald-700 dark:hover:bg-emerald-800 dark:focus:ring-emerald-800">Add Pic 
             <span class="ml-2 material-symbols-outlined">add_photo_alternate</span>
         </button>
     </div>
@@ -279,13 +281,13 @@
     
     <!-- informations -->
     <span data-popover-target="popover-top-info" data-popover-placement="bottom" class="material-symbols-outlined z-20 fixed text-3xl bottom-6 right-6 cursor-pointer">help</span>
-    <div data-popover id="popover-top-info" role="tooltip" class="absolute z-10 invisible inline-block w-80 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+    <div data-popover id="popover-top-info" role="tooltip" class="absolute z-20 invisible inline-block w-80 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
         <div class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
             <h3 class="font-semibold text-lg text-gray-900 dark:text-white">NutriScanAI: Your Ultimate Nutritional Analysis Tool</h3>
         </div>
         <div class="px-3 py-2">
             <p> <b class="text-lg text-gray-200">How to Use NutriScanAI:</b><br>
-                Scan Product Packaging: Effortlessly capture food product packaging by aiming your device's camera at the nutrition or ingredient side, or upload an image from your device.<br><br>
+                Scan Product Packaging: Effortlessly capture food product packaging by aiming your device's camera at the nutrition or ingredient side, or upload an image from your device. <b>* 30mb image size limit</b><br><br>
                 <b class="text-lg text-gray-200">Rating info.</b> <br><br>
                 <span class="Poor rounded-full font-semibold text-white p-1 me-2">Poor (1)</span>
                 <span class="Fair rounded-full font-semibold text-white p-1 me-2">Fair (2)</span>

@@ -4,6 +4,7 @@ const input = document.querySelector('input');
 const scanBtn = document.getElementById('scanBtn');
 const cancelBtn = document.getElementById('cancelBtn');
 const img = document.getElementById('preview');
+const imgBack = document.getElementById('preview-img-back');
 const skeleton = document.getElementById('skeleton');
 const loaded = document.getElementById('loaded');
 const err = document.getElementById('err');
@@ -59,19 +60,23 @@ input.addEventListener('change', async () => {
     if (file) {
         img.src = URL.createObjectURL(file);
         img.classList.remove('hidden');
-        scanBtn.querySelector('span').innerText = 'document_scanner';
+        scanBtn.innerHTML = `Scan <span class="ml-2 material-symbols-outlined">document_scanner</span>`;
         cancelBtn.classList.remove('hidden');
+        imgBack.classList.add('backdrop-blur-lg');
+        imgBack.classList.remove('hidden');
     }
 });
 
 cancelBtn.addEventListener('click', () => {
     file = null;
     uiAndValChanges();
-    scanBtn.querySelector('span').innerText = 'add_photo_alternate';
+    scanBtn.innerHTML = `Add Pic <span class="ml-2 material-symbols-outlined">add_photo_alternate</span>`;
 });
 
 // Functions
 function uiAndValChanges() {
+    imgBack.classList.remove('backdrop-blur-lg');
+    imgBack.classList.add('hidden');
     input.value = '';
     img.src = '';
     img.classList.add('hidden');
@@ -79,7 +84,6 @@ function uiAndValChanges() {
 }
 
 function sendFile(file, type) {
-    removeData();
     skeleton.classList.remove('hidden');
     loaded.classList.add('hidden');
     src = URL.createObjectURL(file);
@@ -88,11 +92,14 @@ function sendFile(file, type) {
     } else {
         socket.emit('scan', ({ id, file, type: 'image/png' }));
     }
+    removeData();
     file = null;
 }
 
 socket.on(id, (data) => {
     skeleton.classList.add('hidden');
+    scanBtn.disabled = false;
+    scanBtn.innerHTML = `Add Pic <span class="ml-2 material-symbols-outlined">add_photo_alternate</span>`;
     if (data.error != "null") {
         errText.innerText = data.error;
         err.classList.remove('hidden');
@@ -100,24 +107,42 @@ socket.on(id, (data) => {
         loaded.classList.remove('hidden');
         appendData(data);
     }
-    scanBtn.disabled = false;
-    scanBtn.innerHTML = `Scan 
-    <span class="ml-2 material-symbols-outlined">add_photo_alternate</span>`;
 });
 
 function appendData(data) {
-    title.innerText = data.title;
-    expDate.innerText = data.expire_date;
+    title.innerText = getCorrectData(data.title, 'Not Dectected');
+    expDate.innerText = getCorrectData(data.expire_date, 'Not Dectected');
     productImg.src = src;
-    tag.innerText = data.tag;
-    dietaryInfo.innerText = data.dietary_info;
-    child.querySelector('h4').innerText = data.age_groups.Children.tag;
-    child.querySelector('p').innerText = data.age_groups.Children.desc;
-    adult.querySelector('h4').innerText = data.age_groups.Adults.tag;
-    adult.querySelector('p').innerText = data.age_groups.Adults.desc;
-    elder.querySelector('h4').innerText = data.age_groups.Elderly.tag;
-    elder.querySelector('p').innerText = data.age_groups.Elderly.desc;
-    desc.innerText = data.description;
+    tag.innerText = getCorrectData(data.tag, 'No Rating');
+    dietaryInfo.innerText = getCorrectData(data.dietary_info, 'Not Identified')
+    // Children
+    if(data.age_groups && data.age_groups.Children) {
+        const childInfo = data.age_groups.Children;
+        child.querySelector('h4').innerText = getCorrectData(childInfo.tag, 'No Rating');
+        child.querySelector('p').innerText = getCorrectData(childInfo.desc, 'No description');
+    } else {
+        child.querySelector('h4').innerText = 'N/A';
+        child.querySelector('p').innerText = 'Not Available';
+    }
+    // Adults
+    if(data.age_groups && data.age_groups.Adults) {
+        const adultsInfo = data.age_groups.Adults;
+        adult.querySelector('h4').innerText = getCorrectData(adultsInfo.tag, 'No Rating');
+        adult.querySelector('p').innerText = getCorrectData(adultsInfo.desc, 'No description');
+    } else {
+        adult.querySelector('h4').innerText = 'N/A';
+        adult.querySelector('p').innerText = 'Not Available';
+    }
+    // Elderly
+    if(data.age_groups && data.age_groups.Elderly) {
+        const elderInfo = data.age_groups.Elderly;
+        elder.querySelector('h4').innerText = getCorrectData(elderInfo.tag, 'No Rating');
+        elder.querySelector('p').innerText = getCorrectData(elderInfo.desc, 'No description');
+    } else {
+        elder.querySelector('h4').innerText = 'N/A';
+        elder.querySelector('p').innerText = 'Not Available';
+    }
+    desc.innerText = getCorrectData(data.description, "No Description Available");
     createTable(data);
     appendSources(data.sources);
     coloring(data);
@@ -209,20 +234,73 @@ function removeSources() {
 
 function coloring(data) {
     prevData = data;
-    tag.classList.add(data.tag.split(/[\/\s]+/).join(''));
-    dietaryInfo.classList.add(data.dietary_info.split(/[\/\s]+/).join(''));
-    eco.classList.add(data.eco.split(/[\/\s]+/).join('')+"-eco");
-    child.querySelector('h4').classList.add(data.age_groups.Children.tag.split(/[\/\s]+/).join(''));
-    adult.querySelector('h4').classList.add(data.age_groups.Adults.tag.split(/[\/\s]+/).join(''));
-    elder.querySelector('h4').classList.add(data.age_groups.Elderly.tag.split(/[\/\s]+/).join(''));
+    const tagColor = getCorrectColor(data.tag);
+    tag.classList.add(tagColor);
+    prevData.tag = tagColor;
+
+    const dietaryColor =  getCorrectColor(data.dietary_info);
+    dietaryInfo.classList.add(dietaryColor);
+    prevData.dietary_info = dietaryColor;
+
+    const ecoColor = getCorrectColor(data.eco)+"-eco";
+    eco.classList.add(ecoColor);
+    prevData.eco = ecoColor;
+
+    if(data.age_groups) {
+        //child
+        if(data.age_groups.Children) {
+            const childInfo = data.age_groups.Children;
+            const childColor = getCorrectColor(childInfo.tag);
+            child.querySelector('h4').classList.add(childColor);
+            prevData.age_groups.Children.tag = childColor;
+        }
+
+        //adult
+        if(data.age_groups.Adults) {
+            const adultsInfo = data.age_groups.Adults;
+            const adultColor = getCorrectColor(adultsInfo.tag);
+            adult.querySelector('h4').classList.add(adultColor);
+            prevData.age_groups.Adults.tag = adultColor;
+        }
+
+        // elder
+        if(data.age_groups.Elderly) {
+            const elderInfo = data.age_groups.Elderly;
+            const elderColor = getCorrectColor(elderInfo.tag);
+            elder.querySelector('h4').classList.add(elderColor);
+            prevData.age_groups.Elderly.tag = elderColor;
+        }
+    }
 }
 
 function removerColor() {
-    tag.classList.remove(prevData.tag.split(/[\/\s]+/).join(''));
-    dietaryInfo.classList.remove(prevData.dietary_info.split(/[\/\s]+/).join(''));
-    eco.classList.remove(prevData.eco.split(/[\/\s]+/).join('')+"-eco");
-    child.querySelector('h4').classList.remove(prevData.age_groups.Children.tag.split(/[\/\s]+/).join(''));
-    adult.querySelector('h4').classList.remove(prevData.age_groups.Adults.tag.split(/[\/\s]+/).join(''));
-    elder.querySelector('h4').classList.remove(prevData.age_groups.Elderly.tag.split(/[\/\s]+/).join(''));
+    tag.classList.remove(prevData.tag);
+    dietaryInfo.classList.remove(prevData.dietary_info);
+    eco.classList.remove(prevData.eco);
+
+    //child
+    if(prevData.age_groups) {
+        if(prevData.age_groups.Children) {
+            child.querySelector('h4').classList.remove(prevData.age_groups.Children.tag);
+        }
+            
+        //adult
+        if(prevData.age_groups.Adults) {
+            adult.querySelector('h4').classList.remove(prevData.age_groups.Adults.tag);
+        }
+
+        //elder
+        if(prevData.age_groups.Elderly) {
+            elder.querySelector('h4').classList.remove(prevData.age_groups.Elderly.tag);
+        }
+    }
     prevData = null;
+}
+
+function getCorrectData(data, alt) {
+    return data ? data : alt;
+}
+
+function getCorrectColor(data) {
+    return data ? data.split(/[\/\s]+/).join('') : 'na';
 }

@@ -45,6 +45,8 @@ function fileToGenerativePart(file, mimeType) {
 // Main function to run Google Generative AI
 async function run() {
   const prompt = `Objective: Analyze an image to identify food or body care products and provide comprehensive nutritional information based on extracted text and independent research from credible sources, and URL references.
+  Caution: Please note that QR codes and barcodes will not be accepted as part of the text extraction process. Ensure that the image provided does not contain QR codes or barcodes, as they will not be processed.
+  
   Functionality:
   Text Extraction (Primary Process):
   Extract all relevant text from the image using Optical Character Recognition (OCR) technology.
@@ -172,7 +174,6 @@ async function run() {
     const response = await result.response;
     return JSON.parse(response.text().replace('```', '').replace('```', '').replace('JSON', ''));
   } catch (error) {
-    console.error(error);
     return { error: "Oops! Something went wrong while processing the image. Please try again." };
   }
 }
